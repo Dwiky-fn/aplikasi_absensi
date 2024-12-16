@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
-
+import utama.konstanta;
 
 public class mnjemn_mhs_admin extends javax.swing.JFrame {
     DefaultTableModel model;
@@ -16,7 +16,7 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
 
     public mnjemn_mhs_admin() {
         initComponents();
-        model = (DefaultTableModel)jTable1.getModel();
+        model = (DefaultTableModel)data_tabel.getModel();
         
         try{
             Class.forName("com.mysql.jdbc.Driver");
@@ -51,9 +51,9 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        UpdateData = new javax.swing.JButton();
+        data_tabel = new javax.swing.JTable();
+        tutup_btn = new javax.swing.JButton();
+        UpdateData_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,7 +73,7 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
         jPanel5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        data_tabel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -96,45 +96,55 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jTable1.setFocusCycleRoot(true);
-        jTable1.setGridColor(new java.awt.Color(0, 0, 0));
-        jTable1.setSelectionBackground(new java.awt.Color(204, 204, 204));
-        jTable1.setShowGrid(true);
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(5);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(50);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(80);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
-            jTable1.getColumnModel().getColumn(5).setResizable(false);
+        data_tabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        data_tabel.setFocusCycleRoot(true);
+        data_tabel.setGridColor(new java.awt.Color(0, 0, 0));
+        data_tabel.setSelectionBackground(new java.awt.Color(204, 204, 204));
+        data_tabel.setShowGrid(true);
+        data_tabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                data_tabelMouseClicked(evt);
+            }
+        });
+        data_tabel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                data_tabelKeyPressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(data_tabel);
+        if (data_tabel.getColumnModel().getColumnCount() > 0) {
+            data_tabel.getColumnModel().getColumn(0).setResizable(false);
+            data_tabel.getColumnModel().getColumn(0).setPreferredWidth(5);
+            data_tabel.getColumnModel().getColumn(1).setResizable(false);
+            data_tabel.getColumnModel().getColumn(1).setPreferredWidth(50);
+            data_tabel.getColumnModel().getColumn(2).setResizable(false);
+            data_tabel.getColumnModel().getColumn(2).setPreferredWidth(80);
+            data_tabel.getColumnModel().getColumn(3).setResizable(false);
+            data_tabel.getColumnModel().getColumn(4).setResizable(false);
+            data_tabel.getColumnModel().getColumn(5).setResizable(false);
         }
 
         jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 560, 130));
 
-        jButton3.setBackground(new java.awt.Color(255, 255, 204));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton3.setText("Tutup");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        tutup_btn.setBackground(new java.awt.Color(255, 255, 204));
+        tutup_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        tutup_btn.setText("Tutup");
+        tutup_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                tutup_btnActionPerformed(evt);
             }
         });
-        jPanel5.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 180, 70, -1));
+        jPanel5.add(tutup_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 180, 70, -1));
 
-        UpdateData.setBackground(new java.awt.Color(255, 255, 204));
-        UpdateData.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        UpdateData.setText("Update Data");
-        UpdateData.addActionListener(new java.awt.event.ActionListener() {
+        UpdateData_btn.setBackground(new java.awt.Color(255, 255, 204));
+        UpdateData_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        UpdateData_btn.setText("Update Data");
+        UpdateData_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UpdateDataActionPerformed(evt);
+                UpdateData_btnActionPerformed(evt);
             }
         });
-        jPanel5.add(UpdateData, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 100, -1));
+        jPanel5.add(UpdateData_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 100, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -161,16 +171,62 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void tutup_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tutup_btnActionPerformed
         new admin.MenuUtamaAdmin().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_tutup_btnActionPerformed
 
-    private void UpdateDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateDataActionPerformed
+    private void UpdateData_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateData_btnActionPerformed
         new admin.update_data_mhs_admin().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_UpdateDataActionPerformed
+    }//GEN-LAST:event_UpdateData_btnActionPerformed
 
+    private void data_tabelKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_data_tabelKeyPressed
+        
+    }//GEN-LAST:event_data_tabelKeyPressed
+
+    private void data_tabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_data_tabelMouseClicked
+        int rowSelected = data_tabel.getSelectedRow();
+        int rowCount = data_tabel.getRowCount();
+        Object nim = null;
+        for (int i = 0; i < rowCount; i++) {
+            nim = model.getValueAt(rowSelected, 1);
+        }
+        konstanta.NIM = (String) nim;
+        konstanta.isEdit = true;
+        System.out.println(konstanta.NIM);
+        System.out.println(konstanta.isEdit);
+        
+        if (evt.getClickCount() == 2){
+            data_tabel.clearSelection();
+            konstanta.NIM = null;
+            konstanta.isEdit = false;
+            System.out.println(konstanta.NIM);
+            System.out.println(konstanta.isEdit);
+        }
+    }//GEN-LAST:event_data_tabelMouseClicked
+
+    private void TampilData() {
+        try {
+            ResultSet rs = perintah.executeQuery("SELECT * FROM data_mahasiswa");
+            model.setRowCount(0); // Hapus data sebelumnya di tabel
+            int no = 1; // Inisialisasi nomor
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    no++, // Kolom No
+                    rs.getString("nim"), // Kolom NIM
+                    rs.getString("nama"), // Kolom Nama
+                    rs.getString("kelas"), // Kolom Kelas
+                    rs.getString("prodi"), // Kolom Program Studi
+                    rs.getString("status") // Kolom Status
+                });
+            }
+            model.fireTableDataChanged(); // Notifikasi perubahan data ke tabel
+        } catch (Exception e) {
+            e.printStackTrace(); // Tampilkan error ke konsol untuk debugging
+        }
+    }
+    
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -178,36 +234,17 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
             }
         });
     }
-private void TampilData() {
-    try {
-        ResultSet rs = perintah.executeQuery("SELECT * FROM data_mahasiswa");
-        model.setRowCount(0); // Hapus data sebelumnya di tabel
-        int no = 1; // Inisialisasi nomor
-        while (rs.next()) {
-            model.addRow(new Object[]{
-                no++, // Kolom No
-                rs.getString("nim"), // Kolom NIM
-                rs.getString("nama"), // Kolom Nama
-                rs.getString("kelas"), // Kolom Kelas
-                rs.getString("prodi"), // Kolom Program Studi
-                rs.getString("status") // Kolom Status
-            });
-        }
-        model.fireTableDataChanged(); // Notifikasi perubahan data ke tabel
-    } catch (Exception e) {
-        e.printStackTrace(); // Tampilkan error ke konsol untuk debugging
-    }
-}    
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton UpdateData;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton UpdateData_btn;
+    private javax.swing.JTable data_tabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton tutup_btn;
     // End of variables declaration//GEN-END:variables
 }
