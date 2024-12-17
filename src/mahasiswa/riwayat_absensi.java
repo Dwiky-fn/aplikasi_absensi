@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import utama.koneksi_to_db;
+import utama.konstanta;
 
 /**
  *
@@ -14,8 +15,9 @@ import utama.koneksi_to_db;
  */
 public class riwayat_absensi extends javax.swing.JFrame {
     ResultSet rs;
-     Statement perintah;
-     DefaultTableModel model;
+    Statement perintah;
+    DefaultTableModel model;
+    private String uid = konstanta.UID;
      
     /**
      * Creates new form riwayat_absensi
@@ -52,13 +54,13 @@ public class riwayat_absensi extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        prodi_tf = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        nama_tf = new javax.swing.JLabel();
+        nim_tf = new javax.swing.JLabel();
+        kelas_tf = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -109,8 +111,27 @@ public class riwayat_absensi extends javax.swing.JFrame {
             new String [] {
                 "No", "Tanggal", "Mata Kuliah", "Jam Absensi"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setMinWidth(40);
+            jTable1.getColumnModel().getColumn(0).setMaxWidth(45);
+        }
 
         jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 560, 130));
 
@@ -118,9 +139,9 @@ public class riwayat_absensi extends javax.swing.JFrame {
         jLabel3.setText("Kelas");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 90, -1));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel1.setText("prodi_mhs");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 50, 60, -1));
+        prodi_tf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        prodi_tf.setText("prodi_mhs");
+        jPanel2.add(prodi_tf, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 50, 60, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("NIM");
@@ -134,17 +155,17 @@ public class riwayat_absensi extends javax.swing.JFrame {
         jLabel8.setText("Nama ");
         jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 60, -1));
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel9.setText("nama_mhs");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 60, -1));
+        nama_tf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        nama_tf.setText("nama_mhs");
+        jPanel2.add(nama_tf, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 160, -1));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel10.setText("nim_mhs");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 60, -1));
+        nim_tf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        nim_tf.setText("nim_mhs");
+        jPanel2.add(nim_tf, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 160, -1));
 
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel11.setText("kelas_mhs");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 20, 60, -1));
+        kelas_tf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        kelas_tf.setText("kelas_mhs");
+        jPanel2.add(kelas_tf, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 20, 60, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -175,9 +196,7 @@ public class riwayat_absensi extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     private void tampildata(){
-        
         try {
-            
             rs = perintah.executeQuery("SELECT data_absensi.tgl AS Tanggal, mata_kuliah.matkul AS Mata_Kuliah, data_absensi.jam AS Jam_Absensi "
                     + "FROM data_absensi "
                     + "JOIN mata_kuliah ON data_absensi.id_matkul = mata_kuliah.id_matkul;");
@@ -193,7 +212,25 @@ public class riwayat_absensi extends javax.swing.JFrame {
             }
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
-        } 
+        }
+    }
+    
+    private void getData_mhs() {
+        Connection connection = koneksi_to_db.getConnection();
+        if(connection != null){
+            String query = "SELECT nama, nim, kelas, prodi FROM data_mahasiswa WHERE uid = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)){
+                statement.setString(1, uid);
+                ResultSet rs = statement.executeQuery();
+                if(rs.next()) {
+                    nama_tf.setText(rs.getString("nama"));
+                    nim_tf.setText(rs.getString("nim"));
+                    kelas_tf.setText(rs.getString("kelas"));
+                    prodi_tf.setText(rs.getString("prodi"));
+                }
+            } catch (Exception e) {
+            }
+        }
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -202,7 +239,7 @@ public class riwayat_absensi extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
+        getData_mhs();
         tampildata();
     }//GEN-LAST:event_formWindowOpened
 
@@ -243,9 +280,6 @@ public class riwayat_absensi extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -253,10 +287,13 @@ public class riwayat_absensi extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel kelas_tf;
+    private javax.swing.JLabel nama_tf;
+    private javax.swing.JLabel nim_tf;
+    private javax.swing.JLabel prodi_tf;
     // End of variables declaration//GEN-END:variables
 }

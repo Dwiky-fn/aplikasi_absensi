@@ -3,10 +3,12 @@ package mahasiswa;
 import javax.swing.JOptionPane;
 import utama.konstanta;
 
-
 public class menu_utama_mhs extends javax.swing.JFrame {
     public menu_utama_mhs() {
         initComponents();
+        
+        String uid = konstanta.UID;
+        System.out.println(uid);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -137,9 +139,6 @@ public class menu_utama_mhs extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_logout_btn1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
