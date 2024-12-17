@@ -124,7 +124,6 @@ public class form_absensi extends javax.swing.JFrame{
         jLabel6.setText("NIM");
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 0, 188, -1));
 
-        matkul_tf.setEditable(false);
         matkul_tf.setBackground(new java.awt.Color(255, 255, 204));
         matkul_tf.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         matkul_tf.addActionListener(new java.awt.event.ActionListener() {
@@ -256,15 +255,49 @@ public class form_absensi extends javax.swing.JFrame{
         }
     }
 
-    private void simpanDataAbsensi(String uid, String nim, String nama, String matkul, String tgl, String jam, String status){
+    private void simpanDataAbsensi(String uid, String nim, String nama, String id_matkul, String tgl, String jam, String status){
         Connection connection = koneksi_to_db.getConnection();
         if(connection != null) {
-            String query = "INSERT INTO data_absensi (uid, nim, nama, matkul, jam, tgl, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            
+            // 1 Cek apakah mahasiswa sudah absensi di mata kuliah yang sama
+            String cekData = "SELECT COUNT(*) FROM data_absensi WHERE nim = ? AND id_matkul = ?";
+            try (PreparedStatement state_cekData = connection.prepareStatement(cekData)){
+                state_cekData.setString(1, nim);
+                state_cekData.setString(2, id_matkul);
+                
+                ResultSet rs_cekData = state_cekData.executeQuery();
+                rs_cekData.next();
+                if(rs_cekData.getInt(1) > 0) {
+                    JOptionPane.showMessageDialog(null, "Anda sudah melakukan absensi!");
+                    return;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+            // 2 Cek apakah waktu masih valid
+            String cek_waktu = "SELECT COUNT(*) FROM mata_kuliah WHERE id_matkul = ? AND ? BETWEEN jam_mulai AND jam_selesai";
+            try (PreparedStatement state_cekWaktu = connection.prepareStatement(cek_waktu)){
+                state_cekWaktu.setString(1, id_matkul);
+                state_cekWaktu.setString(1, jam);
+                
+                ResultSet rs_cekWaktu = state_cekWaktu.executeQuery();
+                rs_cekWaktu.next();
+                if(rs_cekWaktu.getInt(1) == 0){
+                    JOptionPane.showMessageDialog(null, "Tidak ada jam kuliah sekarang!");
+                    return;
+                }
+            } catch (SQLException e) {
+//                e.printStackTrace();
+            }
+            
+            // 3 Insert data absensi
+            String query = "INSERT INTO data_absensi (uid, nim, nama, id_matkul, jam, tgl, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(query)){
                 statement.setString(1, uid);
                 statement.setString(2, nim);
                 statement.setString(3, nama);
-                statement.setString(4, matkul);
+                statement.setString(4, id_matkul);
                 statement.setString(5, jam);
                 statement.setString(6, tgl);
                 statement.setString(7, status);
@@ -275,27 +308,6 @@ public class form_absensi extends javax.swing.JFrame{
                 e.printStackTrace();
             }
         }
-    }
-    
-    private void updateDateTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        tgl_lbl.setText(dateFormat.format(new Date()));
-        updateTime(); // Memperbarui waktu saat aplikasi dimulai
-    }
-    
-    private void updateTime() {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        jam_lbl.setText(timeFormat.format(new Date())); // Memperbarui label jam
-    }
-    
-    private String getHariSekarang() {
-        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE"); // Format hari (contoh: Senin, Selasa)
-        return dayFormat.format(new Date()); // Mengembalikan nama hari sekarang
-    }
-
-    private String getJamSekarang() {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss"); // Format waktu (contoh: 07:00:00)
-        return timeFormat.format(new Date()); // Mengembalikan waktu sekarang
     }
     
     private void updateLabelMatkul() {
@@ -322,7 +334,54 @@ public class form_absensi extends javax.swing.JFrame{
             System.out.println("Koneksi belum diinisialisasi");
         }
     }
+    
+    private String getIdMatkul(String namaMatkul) {
+        Connection connection = koneksi_to_db.getConnection();
+        String idMatkul = null;
 
+        if (connection != null) {
+            // Query untuk mencari id_matkul berdasarkan nama_matkul
+            String sql = "SELECT id_matkul FROM mata_kuliah WHERE matkul = ?";
+
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                // Set parameter nama_matkul
+                statement.setString(1, namaMatkul);
+
+                // Eksekusi query
+                ResultSet rs = statement.executeQuery();
+
+                if (rs.next()) {
+                    // Ambil id_matkul dari hasil query
+                    idMatkul = rs.getString("id_matkul");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace(); // Menampilkan error jika terjadi masalah dengan query atau koneksi
+            }
+        }
+        return idMatkul;
+    }
+    
+    private void updateDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        tgl_lbl.setText(dateFormat.format(new Date()));
+        updateTime(); // Memperbarui waktu saat aplikasi dimulai
+    }
+    
+    private void updateTime() {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        jam_lbl.setText(timeFormat.format(new Date())); // Memperbarui label jam
+    }
+    
+    private String getHariSekarang() {
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE"); // Format hari (contoh: Senin, Selasa)
+        return dayFormat.format(new Date()); // Mengembalikan nama hari sekarang
+    }
+
+    private String getJamSekarang() {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss"); // Format waktu (contoh: 07:00:00)
+        return timeFormat.format(new Date()); // Mengembalikan waktu sekarang
+    }
+    
     private void clearFields() {
         uid_tf.setText("");
         nama_tf.setText("");
@@ -342,9 +401,18 @@ public class form_absensi extends javax.swing.JFrame{
         String status = (String) status_cb.getSelectedItem();
         String jam = jam_lbl.getText();
         String tgl = tgl_lbl.getText();
-        String matkul = matkul_tf.getText().trim();
         
-        simpanDataAbsensi(uid, nim, nama, matkul, tgl, jam, status);
+        String namaMatkul = matkul_tf.getText();  // Misalnya nama mata kuliah diambil dari text field
+        String id_matkul = getIdMatkul(namaMatkul);
+
+        if (id_matkul != null) {
+            // Lakukan sesuatu dengan idMatkul, misalnya simpan absensi
+            simpanDataAbsensi(uid, nim, nama, id_matkul, tgl, jam, status);
+//            System.out.println("ID Mata Kuliah: " + id_matkul);
+        } else {
+            // Jika tidak ditemukan, bisa menampilkan pesan bahwa anda alpa
+            JOptionPane.showMessageDialog(null, "Mata kuliah tidak ditemukan!");
+        }
     }//GEN-LAST:event_simpan_btnActionPerformed
 
     private void matkul_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matkul_tfActionPerformed
