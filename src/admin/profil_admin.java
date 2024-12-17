@@ -188,13 +188,13 @@ public class profil_admin extends javax.swing.JFrame {
     private void getDataAdmin() {
         Connection connection = koneksi_to_db.getConnection();
         if (connection != null) {
-            String query = "SELECT nama, nip, email, no_tlp, foto_profil FROM data_admin";
+            String query = "SELECT nama, nidn, email, no_telp, foto FROM data_admin";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 ResultSet rs = statement.executeQuery();
                 if (rs.next()) {
                     // Mengambil data teks
                     nama_tf.setText(rs.getString("nama"));
-                    nip_tf.setText(rs.getString("nip"));
+                    nip_tf.setText(rs.getString("nidn"));
                     email_tf.setText(rs.getString("email"));
                     notlp_tf.setText(rs.getString("no_tlp"));
 
@@ -237,13 +237,13 @@ public class profil_admin extends javax.swing.JFrame {
         pilih_foto_btn.setVisible(true);
         edit_btn.setEnabled(false);
         cancel_btn.setText("Batal");
-    }// GEN-LAST:event_edit_btnActionPerformed
+    }
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {// GEN-FIRST:event_formWindowOpened
         simpan_btn.setVisible(false);
         edit_btn.requestFocus();
         pilih_foto_btn.setVisible(false);
-    }// GEN-LAST:event_formWindowOpened
+    }
 
     private void pilih_foto_btnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_pilih_foto_btnActionPerformed
         JFileChooser fc = new JFileChooser();
@@ -255,7 +255,7 @@ public class profil_admin extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon(file_path);
 
         foto_lbl.setIcon(icon);
-    }// GEN-LAST:event_pilih_foto_btnActionPerformed
+    }
 
     private void simpan_btnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_simpan_btnActionPerformed
         nip_tf.setEditable(false);
@@ -267,7 +267,7 @@ public class profil_admin extends javax.swing.JFrame {
         edit_btn.setEnabled(true);
         cancel_btn.requestFocus();
         cancel_btn.setText("Tutup");
-    }// GEN-LAST:event_simpan_btnActionPerformed
+    }
 
     private void cancel_btnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cancel_btnActionPerformed
         String getText_btn = cancel_btn.getText();
@@ -285,11 +285,8 @@ public class profil_admin extends javax.swing.JFrame {
             cancel_btn.requestFocus();
             cancel_btn.setText("Tutup");
         }
-    }// GEN-LAST:event_cancel_btnActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
