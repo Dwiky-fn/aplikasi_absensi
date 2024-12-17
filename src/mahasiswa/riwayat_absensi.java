@@ -4,17 +4,33 @@
  */
 package mahasiswa;
 
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+import utama.koneksi_to_db;
+
 /**
  *
  * @author User
  */
 public class riwayat_absensi extends javax.swing.JFrame {
-
+     ResultSet rs;
+     Statement perintah;
+     DefaultTableModel model;
+     Connection connection = koneksi_to_db.getConnection();
+     
     /**
      * Creates new form riwayat_absensi
      */
     public riwayat_absensi() {
         initComponents();
+        
+        
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("Tanggal");
+        model.addColumn("Mata Kuliah");
+        model.addColumn("Jam Absensi");
+        jTable1.setModel(model);
     }
 
     /**
@@ -44,6 +60,11 @@ public class riwayat_absensi extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 51, 51));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -158,6 +179,39 @@ public class riwayat_absensi extends javax.swing.JFrame {
        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        tampildata ();
+
+    }//GEN-LAST:event_formWindowOpened
+    private void tampildata () {
+        
+        try {
+           perintah = connection.createStatement();
+            rs = perintah.executeQuery("SELECT data_absensi.tgl AS Tanggal, mata_kuliah.matkul AS Mata_Kuliah, data_absensi.jam AS Jam_Absensi "
+                    + "FROM data_absensi "
+                    + "JOIN mata_kuliah ON data_absensi.id_makul = mata_kuliah.id_makul;");
+            model.setRowCount(0); // Clear existing rows
+            int no = 1; // Initialize row number
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    no++, // Increment row number
+                    rs.getString("Tanggal"), // Tanggal
+                    rs.getString("Mata_Kuliah"), // Mata Kuliah
+                    rs.getString("Jam_Absensi") // Jam Absensi
+                });
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (perintah != null) perintah.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+    }
     /**
      * @param args the command line arguments
      */
