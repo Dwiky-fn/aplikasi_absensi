@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package mahasiswa;
-
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import utama.koneksi_to_db;
@@ -13,24 +13,25 @@ import utama.koneksi_to_db;
  * @author User
  */
 public class riwayat_absensi extends javax.swing.JFrame {
-     ResultSet rs;
+    ResultSet rs;
      Statement perintah;
      DefaultTableModel model;
-     Connection connection = koneksi_to_db.getConnection();
      
     /**
      * Creates new form riwayat_absensi
      */
     public riwayat_absensi() {
         initComponents();
+        koneksi_to_db.setupDatabaseConnection();
         
+        try {
+            // Membuat Statement menggunakan koneksi yang sudah disiapkan
+            perintah = koneksi_to_db.getConnection().createStatement();
+        } catch (SQLException e) {
+            System.out.println("Gagal membuat Statement: " + e.getMessage());
+        }
         
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("No");
-        model.addColumn("Tanggal");
-        model.addColumn("Mata Kuliah");
-        model.addColumn("Jam Absensi");
-        jTable1.setModel(model);
+        model = (DefaultTableModel)jTable1.getModel();
     }
 
     /**
@@ -173,24 +174,13 @@ public class riwayat_absensi extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       new mahasiswa.menu_utama_mhs().setVisible(true);
-       this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
-        tampildata ();
-
-    }//GEN-LAST:event_formWindowOpened
-    private void tampildata () {
+    private void tampildata(){
         
         try {
-           perintah = connection.createStatement();
+            
             rs = perintah.executeQuery("SELECT data_absensi.tgl AS Tanggal, mata_kuliah.matkul AS Mata_Kuliah, data_absensi.jam AS Jam_Absensi "
                     + "FROM data_absensi "
-                    + "JOIN mata_kuliah ON data_absensi.id_makul = mata_kuliah.id_makul;");
+                    + "JOIN mata_kuliah ON data_absensi.id_matkul = mata_kuliah.id_matkul;");
             model.setRowCount(0); // Clear existing rows
             int no = 1; // Initialize row number
             while (rs.next()) {
@@ -203,15 +193,19 @@ public class riwayat_absensi extends javax.swing.JFrame {
             }
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (perintah != null) perintah.close();
-            } catch (SQLException e) {
-                System.out.println("Error closing resources: " + e.getMessage());
-            }
-        }
+        } 
     }
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       new mahasiswa.menu_utama_mhs().setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        tampildata();
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
