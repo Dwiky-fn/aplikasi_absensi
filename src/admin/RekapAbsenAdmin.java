@@ -4,17 +4,28 @@
  */
 package admin;
 
+import java.awt.Color;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import java.util.ArrayList;
+import utama.koneksi_to_db;
+import java.sql.*;
 /**
  *
  * @author USER
  */
 public class RekapAbsenAdmin extends javax.swing.JFrame {
-
+    DefaultTableModel model;
+    
     /**
      * Creates new form DashboardAdmin
      */
     public RekapAbsenAdmin() {
         initComponents();
+        
+        koneksi_to_db.setupDatabaseConnection();
+        
+        model = (DefaultTableModel)tabel.getModel();
     }
 
     /**
@@ -30,13 +41,21 @@ public class RekapAbsenAdmin extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        list_matkul = new javax.swing.JList<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField1 = new javax.swing.JTextField();
+        tabel = new javax.swing.JTable();
+        tutup_btn = new javax.swing.JButton();
+        cari_matkul_TF = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        cari_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 0, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -55,19 +74,28 @@ public class RekapAbsenAdmin extends javax.swing.JFrame {
         jPanel5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        list_matkul.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                list_matkulMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(list_matkul);
+
+        jPanel5.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, 150, 110));
+
+        tabel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "No", "NIM", "Nama", "Kelas", "Prodi", "Hadir", "Izin", "Sakit", "Alpa"
+                "No", "NIM", "Nama", "Kelas", "Hadir", "Izin", "Sakit", "Alpa"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -78,55 +106,70 @@ public class RekapAbsenAdmin extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jTable1.setFocusCycleRoot(true);
-        jTable1.setGridColor(new java.awt.Color(0, 0, 0));
-        jTable1.setSelectionBackground(new java.awt.Color(204, 204, 204));
-        jTable1.setShowGrid(true);
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(50);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(80);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(70);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
-            jTable1.getColumnModel().getColumn(5).setResizable(false);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(40);
-            jTable1.getColumnModel().getColumn(6).setResizable(false);
-            jTable1.getColumnModel().getColumn(6).setPreferredWidth(40);
-            jTable1.getColumnModel().getColumn(7).setResizable(false);
-            jTable1.getColumnModel().getColumn(7).setPreferredWidth(40);
-            jTable1.getColumnModel().getColumn(8).setResizable(false);
-            jTable1.getColumnModel().getColumn(8).setPreferredWidth(40);
+        tabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tabel.setFocusCycleRoot(true);
+        tabel.setGridColor(new java.awt.Color(0, 0, 0));
+        tabel.setSelectionBackground(new java.awt.Color(204, 204, 204));
+        tabel.setShowGrid(true);
+        jScrollPane1.setViewportView(tabel);
+        if (tabel.getColumnModel().getColumnCount() > 0) {
+            tabel.getColumnModel().getColumn(0).setResizable(false);
+            tabel.getColumnModel().getColumn(0).setPreferredWidth(10);
+            tabel.getColumnModel().getColumn(1).setResizable(false);
+            tabel.getColumnModel().getColumn(1).setPreferredWidth(50);
+            tabel.getColumnModel().getColumn(2).setResizable(false);
+            tabel.getColumnModel().getColumn(2).setPreferredWidth(80);
+            tabel.getColumnModel().getColumn(3).setResizable(false);
+            tabel.getColumnModel().getColumn(3).setPreferredWidth(70);
+            tabel.getColumnModel().getColumn(4).setResizable(false);
+            tabel.getColumnModel().getColumn(4).setPreferredWidth(40);
+            tabel.getColumnModel().getColumn(5).setResizable(false);
+            tabel.getColumnModel().getColumn(5).setPreferredWidth(40);
+            tabel.getColumnModel().getColumn(6).setResizable(false);
+            tabel.getColumnModel().getColumn(6).setPreferredWidth(40);
+            tabel.getColumnModel().getColumn(7).setResizable(false);
+            tabel.getColumnModel().getColumn(7).setPreferredWidth(40);
         }
 
         jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 570, 150));
 
-        jButton3.setBackground(new java.awt.Color(255, 255, 204));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton3.setText("Tutup");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        tutup_btn.setBackground(new java.awt.Color(255, 255, 204));
+        tutup_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        tutup_btn.setText("Tutup");
+        tutup_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                tutup_btnActionPerformed(evt);
             }
         });
-        jPanel5.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 10, 70, -1));
+        jPanel5.add(tutup_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 10, 70, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cari", "Kelas", "Nama", "Tanggal" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+        cari_matkul_TF.setForeground(new java.awt.Color(204, 204, 204));
+        cari_matkul_TF.setText("Search");
+        cari_matkul_TF.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cari_matkul_TFFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cari_matkul_TFFocusLost(evt);
             }
         });
-        jPanel5.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 80, -1));
+        cari_matkul_TF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cari_matkul_TFKeyReleased(evt);
+            }
+        });
+        jPanel5.add(cari_matkul_TF, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 150, -1));
 
-        jTextField1.setForeground(new java.awt.Color(204, 204, 204));
-        jTextField1.setText("Search");
-        jPanel5.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 150, -1));
+        jLabel2.setText("Matkul");
+        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, 20));
+
+        cari_btn.setText("Cari");
+        cari_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cari_btnActionPerformed(evt);
+            }
+        });
+        jPanel5.add(cari_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 10, 60, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -153,15 +196,146 @@ public class RekapAbsenAdmin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void tutup_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tutup_btnActionPerformed
         new admin.MenuUtamaAdmin().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_tutup_btnActionPerformed
 
+    private void cari_matkul_TFFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cari_matkul_TFFocusGained
+        // TODO add your handling code here:
+        if (cari_matkul_TF.getText().equals("Search")) {
+            cari_matkul_TF.setText("");
+            cari_matkul_TF.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_cari_matkul_TFFocusGained
+
+    private void cari_matkul_TFFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cari_matkul_TFFocusLost
+        // TODO add your handling code here:
+        if (cari_matkul_TF.getText().isEmpty()) {
+            cari_matkul_TF.setText("Search");
+            cari_matkul_TF.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_cari_matkul_TFFocusLost
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        jScrollPane2.setVisible(false);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void cari_matkul_TFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cari_matkul_TFKeyReleased
+        String input = cari_matkul_TF.getText().toLowerCase();
+        
+        List<String> filterMatkul = getSugesti(input);
+        
+        if(!filterMatkul.isEmpty()) {
+            list_matkul.setListData(filterMatkul.toArray(new String[0]));
+            jScrollPane2.setVisible(true);
+        } else {
+            jScrollPane2.setVisible(false);
+        }
+    }//GEN-LAST:event_cari_matkul_TFKeyReleased
+
+    private void list_matkulMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list_matkulMouseClicked
+        if(evt.getClickCount() == 1) {
+            String selectedValue = list_matkul.getSelectedValue();
+            if(selectedValue != null) {
+                cari_matkul_TF.setText(selectedValue);
+                jScrollPane2.setVisible(false);
+            }
+        }
+    }//GEN-LAST:event_list_matkulMouseClicked
+
+    private void cari_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cari_btnActionPerformed
+        tampildata();
+    }//GEN-LAST:event_cari_btnActionPerformed
+
+    private void tampildata(){
+        Connection connection = koneksi_to_db.getConnection();
+        String namaMatkul = cari_matkul_TF.getText();
+        String id_matkul = getIdMatkul(namaMatkul);
+        String qry = """
+                     SELECT
+                        m.nim AS NIM, m.nama AS NAMA, m.kelas AS KELAS,
+                        SUM(case when a.status = "Hadir" then 1 else 0 end) as HADIR,
+                        SUM(case when a.status = "Izin" then 1 else 0 end) as IZIN,
+                        SUM(case when a.status = "Sakit" then 1 else 0 end) as SAKIT,
+                        SUM(case when a.status = "Alpa" then 1 else 0 end) as ALPA
+                     FROM
+                        data_mahasiswa m
+                     LEFT JOIN
+                        data_absensi a
+                     ON
+                        m.uid = a.uid
+                     WHERE
+                        id_matkul = ?
+                     GROUP BY
+                        m.nim, m.nama, m.kelas, a.id_matkul
+                     """;
+        try (PreparedStatement state = connection.prepareStatement(qry)){
+            state.setString(1, id_matkul);
+            ResultSet rs = state.executeQuery();
+            model.setRowCount(0); // Clear existing rows
+            int no = 1; // Initialize row number
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    no++, // Increment row number
+                    rs.getString("NIM"), // NIM
+                    rs.getString("NAMA"), // NAMA
+                    rs.getString("KELAS"), // KELAS
+                    rs.getString("HADIR"),// Jumlah HADIR
+                    rs.getString("IZIN"), // Jumlah IZIN
+                    rs.getString("SAKIT"), // Jumlah Sakit
+                    rs.getString("ALPA") // Jumlah Alpa
+                });
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    
+    private String getIdMatkul(String namaMatkul) {
+        Connection connection = koneksi_to_db.getConnection();
+        String idMatkul = null;
+
+        if (connection != null) {
+            // Query untuk mencari id_matkul berdasarkan nama_matkul
+            String sql = "SELECT id_matkul FROM mata_kuliah WHERE matkul = ?";
+
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                // Set parameter nama_matkul
+                statement.setString(1, namaMatkul);
+
+                // Eksekusi query
+                ResultSet rs = statement.executeQuery();
+
+                if (rs.next()) {
+                    // Ambil id_matkul dari hasil query
+                    idMatkul = rs.getString("id_matkul");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace(); // Menampilkan error jika terjadi masalah dengan query atau koneksi
+            }
+        }
+        return idMatkul;
+    }
+    
+    public static List<String> getSugesti(String keyword) {
+        List<String> daftar_matkul = new ArrayList<>();
+        Connection conn = koneksi_to_db.getConnection();
+        if(conn != null){
+            String qry = "SELECT matkul from mata_kuliah WHERE matkul LIKE ? LIMIT 10";
+            try (PreparedStatement state = conn.prepareStatement(qry)){
+                state.setString(1, keyword + "%");
+                ResultSet rs = state.executeQuery();
+                while (rs.next()) {
+                    daftar_matkul.add(rs.getString("matkul"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return daftar_matkul;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -201,14 +375,17 @@ public class RekapAbsenAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton cari_btn;
+    private javax.swing.JTextField cari_matkul_TF;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList<String> list_matkul;
+    private javax.swing.JTable tabel;
+    private javax.swing.JButton tutup_btn;
     // End of variables declaration//GEN-END:variables
 }

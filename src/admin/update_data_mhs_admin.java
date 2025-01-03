@@ -266,8 +266,12 @@ public class update_data_mhs_admin extends javax.swing.JFrame {
         String nim = nim_tf.getText();
         if (isNimExists(nim)) {
             update();
+            new admin.mnjemn_mhs_admin().setVisible(true);
+            this.dispose();
         } else {
             insert();
+            new admin.mnjemn_mhs_admin().setVisible(true);
+            this.dispose();
         }
     }//GEN-LAST:event_simpan_btnActionPerformed
 
