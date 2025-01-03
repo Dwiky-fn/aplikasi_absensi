@@ -22,6 +22,7 @@ public class form_login_mhs extends javax.swing.JFrame {
         initComponents();
         
         koneksi_to_db.setupDatabaseConnection();
+        
     }
 
     /**
@@ -144,6 +145,8 @@ public class form_login_mhs extends javax.swing.JFrame {
     }//GEN-LAST:event_username_tfFocusLost
 
     private void login_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_login_btnActionPerformed
+//        new mahasiswa.menu_utama_mhs().setVisible(true);
+//        this.dispose();
         Connection connection = koneksi_to_db.getConnection();
         
         String username = username_tf.getText();

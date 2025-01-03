@@ -199,7 +199,7 @@ public class riwayat_absensi extends javax.swing.JFrame {
         try {
             rs = perintah.executeQuery("SELECT data_absensi.tgl AS Tanggal, mata_kuliah.matkul AS Mata_Kuliah, data_absensi.jam AS Jam_Absensi "
                     + "FROM data_absensi "
-                    + "JOIN mata_kuliah ON data_absensi.id_matkul = mata_kuliah.id_matkul;");
+                    + "JOIN mata_kuliah ON data_absensi.id_matkul = mata_kuliah.id_matkul WHERE uid = " + uid);
             model.setRowCount(0); // Clear existing rows
             int no = 1; // Initialize row number
             while (rs.next()) {

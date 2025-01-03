@@ -17,7 +17,6 @@ public class ubah_password extends javax.swing.JFrame {
         initComponents();
         
         koneksi_to_db.setupDatabaseConnection();
-        
     }
 
     /**
@@ -98,8 +97,6 @@ public class ubah_password extends javax.swing.JFrame {
             }
         });
         jPanel2.add(simpan_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, -1, -1));
-
-        statusPass_lbl.setText("jLabel7");
         jPanel2.add(statusPass_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 126, -1, 30));
 
         jLabel7.setText(".");
@@ -181,8 +178,8 @@ public class ubah_password extends javax.swing.JFrame {
         String konfr_pass = new String(konfrPass_pf.getPassword());
         
         if (pass_baru.equals(konfr_pass)) {
-            statusPass_lbl.setText("✅");
-            statusPass_lbl.setForeground(java.awt.Color.GREEN);
+            statusPass_lbl.setText("Password Sesuai");
+            statusPass_lbl.setForeground(java.awt.Color.BLUE);
         } else{
             statusPass_lbl.setText("Password Berbeda");
             statusPass_lbl.setForeground(java.awt.Color.RED);
