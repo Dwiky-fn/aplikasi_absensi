@@ -30,6 +30,7 @@ public class update_data_mhs_admin extends javax.swing.JFrame {
             System.out.println("Database connection error: " + e.getMessage());
         }
     }
+    
     private boolean isNimExists(String nim) {
         try {
             String checkNim = "SELECT COUNT(*) FROM data_mahasiswa WHERE nim = ?";
@@ -206,7 +207,7 @@ public class update_data_mhs_admin extends javax.swing.JFrame {
         jPanel2.add(nim_tf, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 170, -1));
 
         prodi_cb.setBackground(new java.awt.Color(255, 255, 204));
-        prodi_cb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TIF", "TL", "TRSE" }));
+        prodi_cb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Prodi" }));
         jPanel2.add(prodi_cb, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 170, -1));
 
         no_tlp_TF.setBackground(new java.awt.Color(255, 255, 204));

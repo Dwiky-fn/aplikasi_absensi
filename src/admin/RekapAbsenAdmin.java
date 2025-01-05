@@ -273,9 +273,11 @@ public class RekapAbsenAdmin extends javax.swing.JFrame {
         try (PreparedStatement state = connection.prepareStatement(qry)){
             state.setString(1, id_matkul);
             ResultSet rs = state.executeQuery();
-            model.setRowCount(0); // Clear existing rows
-            int no = 1; // Initialize row number
+            model.setRowCount(0);
+            int no = 1;
+            boolean hasData = false;
             while (rs.next()) {
+                hasData = true;
                 model.addRow(new Object[]{
                     no++, // Increment row number
                     rs.getString("NIM"), // NIM
@@ -285,6 +287,11 @@ public class RekapAbsenAdmin extends javax.swing.JFrame {
                     rs.getString("IZIN"), // Jumlah IZIN
                     rs.getString("SAKIT"), // Jumlah Sakit
                     rs.getString("ALPA") // Jumlah Alpa
+                });
+            }
+            if(!hasData) {
+                model.addRow(new Object[]{
+                    "-", "-", "Tidak ada Data", "-", "-", "-", "-", "-"
                 });
             }
         } catch (SQLException e) {

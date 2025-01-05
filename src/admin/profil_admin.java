@@ -196,10 +196,10 @@ public class profil_admin extends javax.swing.JFrame {
                     nama_tf.setText(rs.getString("nama"));
                     nip_tf.setText(rs.getString("nidn"));
                     email_tf.setText(rs.getString("email"));
-                    notlp_tf.setText(rs.getString("no_tlp"));
+                    notlp_tf.setText(rs.getString("no_telp"));
 
                     // Mengambil gambar
-                    byte[] foto_profil = rs.getBytes("foto_profil");
+                    byte[] foto_profil = rs.getBytes("foto");
                     if (foto_profil != null) {
                         ImageIcon imageIcon = new ImageIcon(foto_profil);
 

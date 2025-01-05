@@ -4,6 +4,8 @@
  */
 package admin;
 
+import utama.konstanta;
+
 /**
  *
  * @author Hafidz
@@ -15,6 +17,8 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
      */
     public MenuUtamaAdmin() {
         initComponents();
+        String id = konstanta.ID;
+        System.out.println(id);
     }
 
     /**
@@ -29,9 +33,9 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        dashboard_btn = new javax.swing.JButton();
         mnjemn_mahasiswa_btn = new javax.swing.JButton();
         logout_btn = new javax.swing.JButton();
         rekapabsen_btn = new javax.swing.JButton();
@@ -39,7 +43,7 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Menu Utama n");
+        setTitle("Menu Utama Admin");
         setBackground(new java.awt.Color(204, 204, 204));
         setPreferredSize(new java.awt.Dimension(605, 300));
         setResizable(false);
@@ -59,6 +63,7 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Absensi Mahasiswa");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 80));
+        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, -30, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 606, -1));
 
@@ -68,17 +73,6 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Menu");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 10, 110, -1));
-
-        dashboard_btn.setBackground(new java.awt.Color(255, 255, 204));
-        dashboard_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        dashboard_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/dashboard.png"))); // NOI18N
-        dashboard_btn.setText("Dashboard");
-        dashboard_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dashboard_btnActionPerformed(evt);
-            }
-        });
-        jPanel2.add(dashboard_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, 35));
 
         mnjemn_mahasiswa_btn.setBackground(new java.awt.Color(255, 255, 204));
         mnjemn_mahasiswa_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -90,7 +84,7 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
                 mnjemn_mahasiswa_btnActionPerformed(evt);
             }
         });
-        jPanel2.add(mnjemn_mahasiswa_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, -1, 35));
+        jPanel2.add(mnjemn_mahasiswa_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, 140, 35));
 
         logout_btn.setBackground(new java.awt.Color(255, 255, 204));
         logout_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -102,7 +96,7 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
                 logout_btnActionPerformed(evt);
             }
         });
-        jPanel2.add(logout_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 140, -1, 35));
+        jPanel2.add(logout_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 140, 120, 35));
 
         rekapabsen_btn.setBackground(new java.awt.Color(255, 255, 204));
         rekapabsen_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -114,7 +108,7 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
                 rekapabsen_btnActionPerformed(evt);
             }
         });
-        jPanel2.add(rekapabsen_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 60, -1, 35));
+        jPanel2.add(rekapabsen_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 60, 120, 35));
 
         profil_btn.setBackground(new java.awt.Color(255, 255, 204));
         profil_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -126,7 +120,7 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
                 profil_btnActionPerformed(evt);
             }
         });
-        jPanel2.add(profil_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 60, 110, 35));
+        jPanel2.add(profil_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 140, 35));
 
         jLabel4.setBackground(new java.awt.Color(204, 204, 204));
         jLabel4.setForeground(new java.awt.Color(204, 204, 204));
@@ -140,7 +134,7 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void profil_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profil_btnActionPerformed
-        new admin.profil_admin().setVisible(true);
+        new admin.profil_adm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_profil_btnActionPerformed
 
@@ -148,11 +142,6 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
         new utama.form_absensi().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_logout_btnActionPerformed
-
-    private void dashboard_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboard_btnActionPerformed
-        new admin.DashboardAdmin().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_dashboard_btnActionPerformed
 
     private void rekapabsen_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rekapabsen_btnActionPerformed
         new admin.RekapAbsenAdmin().setVisible(true);
@@ -200,13 +189,13 @@ public class MenuUtamaAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton dashboard_btn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton logout_btn;
     private javax.swing.JButton mnjemn_mahasiswa_btn;
     private javax.swing.JButton profil_btn;

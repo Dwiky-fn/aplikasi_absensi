@@ -4,6 +4,10 @@
  */
 package admin;
 
+import utama.koneksi_to_db;
+import utama.konstanta;
+import java.sql.*;
+import javax.swing.JOptionPane;
 /**
  *
  * @author USER
@@ -15,6 +19,8 @@ public class FormLoginAdmin extends javax.swing.JFrame {
      */
     public FormLoginAdmin() {
         initComponents();
+        
+        koneksi_to_db.setupDatabaseConnection();
     }
 
     /**
@@ -72,7 +78,6 @@ public class FormLoginAdmin extends javax.swing.JFrame {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, 80, 25));
 
         username_tf.setBackground(new java.awt.Color(255, 255, 204));
-        username_tf.setText("NIDN");
         username_tf.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 username_tfFocusGained(evt);
@@ -137,20 +142,49 @@ public class FormLoginAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_username_tfActionPerformed
 
     private void username_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_username_tfFocusGained
-        if (username_tf.getText().equals("NIDN")) {
+        if (username_tf.getText().equals("Username")) {
             username_tf.setText("");
         }
     }//GEN-LAST:event_username_tfFocusGained
 
     private void username_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_username_tfFocusLost
         if (username_tf.getText().isEmpty()) {
-            username_tf.setText("NIDN");
+            username_tf.setText("Username");
         }
     }//GEN-LAST:event_username_tfFocusLost
 
     private void login_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_login_btnActionPerformed
-        new admin.MenuUtamaAdmin().setVisible(true);
-        this.dispose();
+        Connection connection = koneksi_to_db.getConnection();
+        
+        String username = username_tf.getText();
+        String password = new String(password_pf.getPassword());
+        
+        if (connection != null){
+            String get_infoLog = "SELECT id, password FROM info_login_admin WHERE username = ?";
+            try (PreparedStatement state = connection.prepareStatement(get_infoLog)){
+                state.setString(1, username);
+                ResultSet rs = state.executeQuery();
+                
+                if(rs.next()) {
+                    String pass = rs.getString("password");
+                    String id = rs.getString("id");
+                    
+                    if(password.equals(pass)) {
+                        JOptionPane.showMessageDialog(this, "Login berhasil!");
+                        konstanta.ID = id;
+                        new admin.MenuUtamaAdmin().setVisible(true);
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Passowrd salah!");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Username tidak ditemukan");
+                }
+            } catch (SQLException e) {
+                System.out.println("Query Error" + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_login_btnActionPerformed
 
     private void batal_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batal_btnActionPerformed
