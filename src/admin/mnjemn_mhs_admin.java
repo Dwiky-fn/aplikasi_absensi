@@ -1,12 +1,14 @@
 
 package admin;
 
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
+import utama.koneksi_to_db;
 import utama.konstanta;
 
 public class mnjemn_mhs_admin extends javax.swing.JFrame {
@@ -55,8 +57,14 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         data_tabel = new javax.swing.JTable();
+        hapus_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 0, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -149,6 +157,16 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
 
         jPanel5.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 560, 130));
 
+        hapus_btn.setBackground(new java.awt.Color(255, 255, 204));
+        hapus_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        hapus_btn.setText("Hapus");
+        hapus_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hapus_btnActionPerformed(evt);
+            }
+        });
+        jPanel5.add(hapus_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -197,6 +215,7 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
         }
         konstanta.NIM = (String) nim;
         konstanta.isEdit = true;
+        hapus_btn.setVisible(true);
         System.out.println(konstanta.NIM);
         System.out.println(konstanta.isEdit);
         
@@ -208,6 +227,26 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
             System.out.println(konstanta.isEdit);
         }
     }//GEN-LAST:event_data_tabelMouseClicked
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        hapus_btn.setVisible(false);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void hapus_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapus_btnActionPerformed
+        if (konstanta.NIM != null) {
+            String query_del = "DELETE FROM data_mahasiswa WHERE nim = ?";
+            try (PreparedStatement pst = koneksi.prepareStatement(query_del)) {
+                pst.setString(1, konstanta.NIM);
+                pst.executeUpdate();
+                System.out.println("Data berhasil dihapus: NIM " + konstanta.NIM);
+            } catch (SQLException e) {
+                System.err.println("Kesalahan saat menghapus data: " + e.getMessage());
+            }
+        } else {
+            System.out.println("NIM tidak valid untuk penghapusan");
+        }
+        TampilData();
+    }//GEN-LAST:event_hapus_btnActionPerformed
 
     private void TampilData() {
         try {
@@ -225,7 +264,7 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
                 });
             }
             model.fireTableDataChanged(); // Notifikasi perubahan data ke tabel
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace(); // Tampilkan error ke konsol untuk debugging
         }
     }
@@ -243,6 +282,7 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton UpdateData_btn;
     private javax.swing.JTable data_tabel;
+    private javax.swing.JButton hapus_btn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
