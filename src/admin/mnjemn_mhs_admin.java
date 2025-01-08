@@ -1,4 +1,3 @@
-
 package admin;
 
 import java.sql.*;
@@ -234,6 +233,23 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
 
     private void hapus_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapus_btnActionPerformed
         if (konstanta.NIM != null) {
+            String query_dell = "DELETE FROM info_login_mhs where username  = ?";
+            try (PreparedStatement pstt = koneksi.prepareStatement(query_dell)){
+                pstt.setString(1, konstanta.NIM);
+                pstt.executeUpdate();
+                System.out.println("Data berhasil dihapus: NIM " + konstanta.NIM);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+            String delete_data_absensi = "DELETE FROM data_absensi WHERE nim = ?";
+            try (PreparedStatement pst = koneksi.prepareStatement(delete_data_absensi)){
+                pst.setString(1, konstanta.NIM);
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
             String query_del = "DELETE FROM data_mahasiswa WHERE nim = ?";
             try (PreparedStatement pst = koneksi.prepareStatement(query_del)) {
                 pst.setString(1, konstanta.NIM);
@@ -242,6 +258,7 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
             } catch (SQLException e) {
                 System.err.println("Kesalahan saat menghapus data: " + e.getMessage());
             }
+            
         } else {
             System.out.println("NIM tidak valid untuk penghapusan");
         }

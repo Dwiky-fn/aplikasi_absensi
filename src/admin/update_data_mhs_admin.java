@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import utama.koneksi_to_db;
 import utama.konstanta;
 
 public class update_data_mhs_admin extends javax.swing.JFrame {
@@ -18,6 +19,8 @@ public class update_data_mhs_admin extends javax.swing.JFrame {
     public update_data_mhs_admin() {
         initComponents();
         connectDatabase();
+        
+        koneksi_to_db.setupDatabaseConnection();
         
         System.out.println(konstanta.NIM);
         System.out.println(konstanta.isEdit);
@@ -51,6 +54,22 @@ public class update_data_mhs_admin extends javax.swing.JFrame {
         return (int) (System.currentTimeMillis() % Integer.MAX_VALUE); // Unique UID
     }
 
+    private void insert_akun_mhs(){
+        String uid = uid_tf.getText();
+        String nim = nim_tf.getText();
+        String pass = "mahasiswaTeknikELektro-23";
+        Connection conn = koneksi_to_db.getConnection();
+        String query = "INSERT INTO info_login_mhs VALUES (?, ?, ?)";
+        try (PreparedStatement pst = conn.prepareStatement(query)){
+            pst.setString(1, uid);
+            pst.setString(2, nim);
+            pst.setString(3, pass);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void insert() {
         if (konstanta.isEdit == true){
             update();
@@ -70,9 +89,9 @@ public class update_data_mhs_admin extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Data Berhasil Ditambahkan");
                 }
             } catch (SQLException e) {
-                System.out.println("Query Error: " + e.getMessage());
                 e.printStackTrace();
             }
+            insert_akun_mhs();
         }
     }
 
