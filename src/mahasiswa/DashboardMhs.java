@@ -146,17 +146,34 @@ public class DashboardMhs extends javax.swing.JFrame {
 
     private void getRekapMhs(){
        Connection connection = koneksi_to_db.getConnection();
-       String query = "SELECT data_mahasiswa.nama, data_mahasiswa.nim, rekap.jmlh_hadir, rekap.jmlh_izin, rekap.jmlh_sakit, rekap.jmlh_alpa FROM data_mahasiswa data_mahasiswa JOIN rekap rekap ON data_mahasiswa.uid = rekap.uid WHERE rekap.uid = ?";
-        try (PreparedStatement state = connection.prepareStatement(query)){
+       String qry = """
+                     SELECT
+                        m.nim AS NIM, m.nama AS NAMA,
+                        SUM(CASE WHEN a.status = "Hadir" THEN 1 ELSE 0 END) AS HADIR,
+                        SUM(CASE WHEN a.status = "Izin" THEN 1 ELSE 0 END) AS IZIN,
+                        SUM(CASE WHEN a.status = "Sakit" THEN 1 ELSE 0 END) AS SAKIT,
+                        SUM(CASE WHEN a.status = "Alpa" THEN 1 ELSE 0 END) AS ALPA
+                     FROM
+                        data_mahasiswa m
+                     LEFT JOIN
+                        data_absensi a
+                     ON
+                        m.uid = a.uid
+                     WHERE
+                        m.uid = ?
+                     GROUP BY
+                        m.nim, m.nama
+                     """;
+        try (PreparedStatement state = connection.prepareStatement(qry)){
             state.setString(1, uid);
             ResultSet rs = state.executeQuery();
             if (rs.next()) {
-                nama_lbl.setText(rs.getString("nama"));
-                nim_lbl.setText(rs.getString("nim"));
-                hadir_lbl.setText(String.valueOf(rs.getInt("jmlh_hadir")) + " hari");
-                izin_lbl.setText(String.valueOf(rs.getInt("jmlh_izin")) + " hari");
-                sakit_lbl.setText(String.valueOf(rs.getInt("jmlh_sakit")) + " hari");
-                alpa_lbl.setText(String.valueOf(rs.getInt("jmlh_alpa")) + " hari");
+                nama_lbl.setText(rs.getString("NAMA"));
+                nim_lbl.setText(rs.getString("NIM"));
+                hadir_lbl.setText(String.valueOf(rs.getInt("HADIR")) + " hari");
+                izin_lbl.setText(String.valueOf(rs.getInt("IZIN")) + " hari");
+                sakit_lbl.setText(String.valueOf(rs.getInt("SAKIT")) + " hari");
+                alpa_lbl.setText(String.valueOf(rs.getInt("ALPA")) + " hari");
             }
         } catch (SQLException e) {
             e.printStackTrace();

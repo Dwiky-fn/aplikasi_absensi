@@ -98,25 +98,25 @@ public class riwayat_absensi extends javax.swing.JFrame {
         jTable1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "No", "Tanggal", "Mata Kuliah", "Jam Absensi"
+                "No", "Tanggal", "Mata Kuliah", "Jam Absensi", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -197,7 +197,7 @@ public class riwayat_absensi extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     private void tampildata(){
         try {
-            rs = perintah.executeQuery("SELECT data_absensi.tgl AS Tanggal, mata_kuliah.matkul AS Mata_Kuliah, data_absensi.jam AS Jam_Absensi "
+            rs = perintah.executeQuery("SELECT data_absensi.tgl AS Tanggal, mata_kuliah.matkul AS Mata_Kuliah, data_absensi.jam AS Jam_Absensi, data_absensi.status AS status "
                     + "FROM data_absensi "
                     + "JOIN mata_kuliah ON data_absensi.id_matkul = mata_kuliah.id_matkul WHERE uid = " + uid);
             model.setRowCount(0); // Clear existing rows
@@ -207,7 +207,8 @@ public class riwayat_absensi extends javax.swing.JFrame {
                     no++, // Increment row number
                     rs.getString("Tanggal"), // Tanggal
                     rs.getString("Mata_Kuliah"), // Mata Kuliah
-                    rs.getString("Jam_Absensi") // Jam Absensi
+                    rs.getString("Jam_Absensi"), // Jam Absensi
+                    rs.getString("Status")
                 });
             }
         } catch (SQLException e) {
