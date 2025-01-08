@@ -71,6 +71,7 @@ public class update_data_mhs_admin extends javax.swing.JFrame {
                 }
             } catch (SQLException e) {
                 System.out.println("Query Error: " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -207,7 +208,7 @@ public class update_data_mhs_admin extends javax.swing.JFrame {
         jPanel2.add(nim_tf, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 170, -1));
 
         prodi_cb.setBackground(new java.awt.Color(255, 255, 204));
-        prodi_cb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Prodi" }));
+        prodi_cb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TIF", "TL", "TRSE" }));
         jPanel2.add(prodi_cb, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 170, -1));
 
         no_tlp_TF.setBackground(new java.awt.Color(255, 255, 204));

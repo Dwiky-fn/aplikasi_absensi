@@ -50,10 +50,11 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        data_tabel = new javax.swing.JTable();
         tutup_btn = new javax.swing.JButton();
         UpdateData_btn = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        data_tabel = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,6 +73,26 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tutup_btn.setBackground(new java.awt.Color(255, 255, 204));
+        tutup_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        tutup_btn.setText("Tutup");
+        tutup_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tutup_btnActionPerformed(evt);
+            }
+        });
+        jPanel5.add(tutup_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 180, 70, -1));
+
+        UpdateData_btn.setBackground(new java.awt.Color(255, 255, 204));
+        UpdateData_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        UpdateData_btn.setText("Update Data");
+        UpdateData_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateData_btnActionPerformed(evt);
+            }
+        });
+        jPanel5.add(UpdateData_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 100, -1));
 
         data_tabel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,27 +145,9 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
             data_tabel.getColumnModel().getColumn(5).setResizable(false);
         }
 
-        jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 560, 130));
+        jScrollPane2.setViewportView(jScrollPane1);
 
-        tutup_btn.setBackground(new java.awt.Color(255, 255, 204));
-        tutup_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        tutup_btn.setText("Tutup");
-        tutup_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tutup_btnActionPerformed(evt);
-            }
-        });
-        jPanel5.add(tutup_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 180, 70, -1));
-
-        UpdateData_btn.setBackground(new java.awt.Color(255, 255, 204));
-        UpdateData_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        UpdateData_btn.setText("Update Data");
-        UpdateData_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UpdateData_btnActionPerformed(evt);
-            }
-        });
-        jPanel5.add(UpdateData_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 100, -1));
+        jPanel5.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 560, 130));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -245,6 +248,7 @@ public class mnjemn_mhs_admin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton tutup_btn;
     // End of variables declaration//GEN-END:variables
 }
